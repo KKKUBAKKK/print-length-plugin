@@ -8,11 +8,18 @@ import com.intellij.execution.executors.DefaultRunExecutor
 import com.intellij.execution.process.OSProcessHandler
 import com.intellij.execution.ui.RunContentManager
 import com.intellij.execution.ui.RunContentDescriptor
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.projectRoots.Sdk
+import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.util.Disposer
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
+import com.jetbrains.python.sdk.PythonSdkType
+import com.jetbrains.python.sdk.PythonSdkUtil.findPythonSdk
 
 class PrintLengthAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
@@ -49,11 +56,18 @@ class PrintLengthAction : AnAction() {
             ex.printStackTrace()
             return
         }
+        
+        // Get the Python interpreter path from the project SDK
+        val sdk: Sdk? = ProjectRootManager.getInstance(project).projectSdk
+        val pythonInterpreterPath: String = if (sdk != null && sdk.sdkType is PythonSdkType) {
+            sdk.homePath ?: "No Python interpreter found"
+        } else {
+            "No Python interpreter found"
+        }
 
         // Prepare Python script execution
-//        val pythonScript = javaClass.getResource("/scripts/count_letters.py")?.path ?: return
         val commandLine = GeneralCommandLine().apply {
-            exePath = "python3"
+            exePath = pythonInterpreterPath
             addParameter(tempScriptPath)
             addParameter(tempFilePath)
         }
