@@ -8,9 +8,8 @@ import com.intellij.execution.executors.DefaultRunExecutor
 import com.intellij.execution.process.OSProcessHandler
 import com.intellij.execution.ui.RunContentManager
 import com.intellij.execution.ui.RunContentDescriptor
-import com.intellij.notification.NotificationGroupManager
-import com.intellij.notification.NotificationType
-import com.intellij.openapi.project.Project
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.util.Disposer
@@ -19,7 +18,6 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import com.jetbrains.python.sdk.PythonSdkType
-import com.jetbrains.python.sdk.PythonSdkUtil.findPythonSdk
 
 class PrintLengthAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
@@ -85,6 +83,9 @@ class PrintLengthAction : AnAction() {
                 "Letter Count Results"
             )
 
+            // Create a dedicated disposable
+            val disposable = Disposable { }
+
             // Show console in the Run tool window
             RunContentManager.getInstance(project).showRunContent(DefaultRunExecutor.getRunExecutorInstance(), descriptor)
 
@@ -93,7 +94,7 @@ class PrintLengthAction : AnAction() {
             processHandler.startNotify()
 
             // Ensure proper disposal
-            Disposer.register(project, consoleView)
+            Disposer.register(disposable, consoleView)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -104,5 +105,9 @@ class PrintLengthAction : AnAction() {
         val selectionModel = editor?.selectionModel
         val hasSelection = selectionModel?.hasSelection() ?: false
         e.presentation.isEnabledAndVisible = hasSelection
+    }
+
+    override fun getActionUpdateThread(): ActionUpdateThread {
+        return ActionUpdateThread.EDT
     }
 }

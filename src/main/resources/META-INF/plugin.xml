@@ -14,7 +14,7 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-        <p>Prints the length of each word in the selected text.</p>
+        <p>Prints the length of each word in the selected text by running a python script in the console.</p>
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
