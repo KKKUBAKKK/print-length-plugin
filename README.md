@@ -7,13 +7,8 @@
 ## Table of Contents
 - [Project Description](#project-description)
 - [Features](#features)
-- [Installation](#installation)
 - [Usage](#usage)
-- [Examples](#examples)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
-
+  
 ## Project Description
 
 `print-length-plugin` is a PyCharm plugin that prints the length of each word from the selected text. It runs a python script in users terminal, that provides the mentioned functionality.
